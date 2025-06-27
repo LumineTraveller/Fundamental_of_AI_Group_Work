@@ -1,0 +1,4 @@
+openai
+dashscope
+python-dotenv
+jsonschema
