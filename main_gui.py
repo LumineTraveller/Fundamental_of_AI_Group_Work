@@ -127,14 +127,32 @@ class LLMChatGUI:
         params_frame.pack(fill=tk.X, padx=5, pady=5)
         
         self.temp_var = tk.DoubleVar(value=0.7)
-        ttk.Label(params_frame, text=f"Temperature:").grid(row=0, column=0, sticky='w')
+# 温度参数标签
+        ttk.Label(params_frame, text="Temperature:").grid(row=0, column=0, sticky='w')
+# 温度滑块
         temp_scale = ttk.Scale(params_frame, from_=0.0, to=1.0, variable=self.temp_var, orient=tk.HORIZONTAL)
         temp_scale.grid(row=0, column=1, sticky='ew')
-        
+# 温度值显示标签
+        self.temp_display = ttk.Label(params_frame, text=f"{self.temp_var.get():.2f}")
+        self.temp_display.grid(row=0, column=2, padx=5)
+
         self.top_p_var = tk.DoubleVar(value=0.9)
-        ttk.Label(params_frame, text=f"Top_p:").grid(row=1, column=0, sticky='w')
+# Top_p参数标签
+        ttk.Label(params_frame, text="Top_p:").grid(row=1, column=0, sticky='w')
+# Top_p滑块
         top_p_scale = ttk.Scale(params_frame, from_=0.0, to=1.0, variable=self.top_p_var, orient=tk.HORIZONTAL)
         top_p_scale.grid(row=1, column=1, sticky='ew')
+# Top_p值显示标签
+        self.top_p_display = ttk.Label(params_frame, text=f"{self.top_p_var.get():.2f}")
+        self.top_p_display.grid(row=1, column=2, padx=5)
+
+# 添加变量追踪回调函数
+        def update_display(*args):
+            self.temp_display.config(text=f"{self.temp_var.get():.2f}")
+            self.top_p_display.config(text=f"{self.top_p_var.get():.2f}")
+
+        self.temp_var.trace_add("write", update_display)
+        self.top_p_var.trace_add("write", update_display)
         
         self.max_tokens_var = tk.IntVar(value=2048)
         ttk.Label(params_frame, text="Max Tokens:").grid(row=2, column=0, sticky='w')
